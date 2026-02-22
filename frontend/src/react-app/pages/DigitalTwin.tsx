@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Box, Activity, ChevronRight, Thermometer, Gauge, Zap } from "lucide-react";
+import {  Box,
+  Activity,
+  AlertTriangle,
+  TrendingUp,
+  ChevronRight,
+  X,
+  Thermometer,
+  Gauge,
+  Zap, } from "lucide-react";
 import { Button } from "@/react-app/components/ui/button";
 import { Card } from "@/react-app/components/ui/card";
 import Navbar from "@/react-app/components/Navbar";
@@ -11,6 +19,7 @@ import { cn } from "@/react-app/lib/utils";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 
+//mqtt code (IMP)
 export default function DigitalTwinPage() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
@@ -104,65 +113,26 @@ export default function DigitalTwinPage() {
             </motion.p>
           </div>
         </section>
-
+            
         {/* Main Content */}
         <section className="px-4 sm:px-6 lg:px-8 pb-20">
           <div className="max-w-7xl mx-auto">
-            {/* 3D Visualization Placeholder - Full Width */}
-            <motion.div
+          
+          <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="h-[600px] lg:h-[700px] border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center relative overflow-hidden mb-6">
-                {/* Grid Pattern */}
-                <div 
-                  className="absolute inset-0 opacity-10"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, #1e3a5f 1px, transparent 1px), linear-gradient(to bottom, #1e3a5f 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
-                  }}
+              <Card className="h-[600px] lg:h-[700px] overflow-hidden mb-6">
+                <iframe
+                  src="/digital-twin/index.html"
+                  className="w-full h-full"
+                  style={{ border: "none" }}
+                  title="3D Digital Twin"
                 />
-                
-                {/* Animated Glow */}
-                <div className="absolute inset-0">
-                  <motion.div 
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </div>
-
-                {/* Placeholder Content */}
-                <div className="relative z-10 text-center">
-                  <motion.div 
-                    className="w-24 h-24 rounded-2xl bg-white shadow-xl flex items-center justify-center mb-6 mx-auto border border-gray-100"
-                    whileHover={{ scale: 1.05, rotate: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Box className="w-12 h-12 text-primary" />
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">3D CNC Digital Twin</h3>
-                  <p className="text-gray-500 max-w-sm mb-6">
-                    Interactive 3D model visualization coming soon. Connect your CNC machine to see real-time component status.
-                  </p>
-                  <div className="flex items-center justify-center gap-2 text-sm text-primary">
-                    <motion.div 
-                      className="w-2 h-2 rounded-full bg-green-500"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    />
-                    <span>System Ready</span>
-                  </div>
-                </div>
-
-                {/* Corner Decorations */}
-                <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/30 rounded-tl-lg" />
-                <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/30 rounded-tr-lg" />
-                <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/30 rounded-bl-lg" />
-                <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/30 rounded-br-lg" />
               </Card>
             </motion.div>
+
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
@@ -264,8 +234,9 @@ export default function DigitalTwinPage() {
               </motion.div>
             )}
           </div>
-        </section>
-      </div>
+          </section>
+     </div>
     </PageTransition>
   );
 }
+

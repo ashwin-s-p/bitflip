@@ -42,6 +42,12 @@ export default function AnalyticsPage() {
   const [diagnoses, setDiagnoses] = useState<string[]>([]);
   const [preventiveTasks, setPreventiveTasks] = useState<Task[]>([]);
   const [futurePredictions, setFuturePredictions] = useState<Prediction[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+
+  type Alert = {
+    message: string;
+    level: "warning" | "critical";
+  };
 
   useEffect(() => {
     const socket = io("http://127.0.0.1:5000", {
@@ -60,11 +66,55 @@ export default function AnalyticsPage() {
   }, []);
 
   function runAI(data: MachineData) {
-    let score = 100;
 
-    const temp = Number(data.temperature);
-    const vib = Number(data.vibration);
-    const speed = Number(data.spindleSpeed);
+    const temp = Number(data.temperature||0);
+    const vib = Number(data.vibration||0);
+    const speed = Number(data.spindleSpeed||0);
+
+    const newAlerts: { message: string; level: "warning" | "critical" }[] = [];
+
+      // Temperature
+      if (temp > 80) {
+        newAlerts.push({
+          message: "Critical: Overheating detected in spindle system",
+          level: "critical",
+        });
+      } else if (temp > 75) {
+        newAlerts.push({
+          message: "Warning: Temperature approaching unsafe limit",
+          level: "warning",
+        });
+      }
+
+      // Vibration
+      if (vib > 7) {
+        newAlerts.push({
+          message: "Critical: Excessive vibration – bearing damage possible",
+          level: "critical",
+        });
+      } else if (vib > 5) {
+        newAlerts.push({
+          message: "Warning: Vibration above normal range",
+          level: "warning",
+        });
+      }
+
+      // Spindle Speed
+      if (speed > 5000) {
+        newAlerts.push({
+          message: "Critical: Spindle overspeed risk",
+          level: "critical",
+        });
+      } else if (speed > 4800) {
+        newAlerts.push({
+          message: "Warning: Spindle nearing maximum rated speed",
+          level: "warning",
+        });
+      }
+
+      setAlerts(newAlerts);
+
+    let score = 100;
 
     // Health Score Logic
     if (temp > 80) score -= 20;
@@ -76,7 +126,7 @@ export default function AnalyticsPage() {
     // Diagnosis Logic (MULTIPLE SUPPORT)
 const issues: string[] = [];
 
-if (temp > 85) {
+if (temp > 80) {
   issues.push("Overheating Risk Detected");
 }
 
@@ -94,79 +144,89 @@ if (issues.length === 0) {
 
 setDiagnoses(issues);
 
-    // Preventive Maintenance Tasks
-    const tasks: Task[] = [];
+    // Preventive Maintenance Tasks (more professional)
+const tasks: Task[] = [];
 
-    if (vib > 6) {
-      tasks.push({
-        task: "Spindle bearing inspection",
-        priority: "High",
-        due: "Within 48 hours",
-        progress: 0,
-      });
-    }
+if (vib > 6) {
+  tasks.push({
+    task: "Inspect spindle bearings for wear and lubrication",
+    priority: "High",
+    due: "Within 24 hours",
+    progress: 0,
+  });
+}
 
-    if (temp > 80) {
-      tasks.push({
-        task: "Coolant system check",
-        priority: "Medium",
-        due: "Within 1 week",
-        progress: 20,
-      });
-    }
+if (temp > 80) {
+  tasks.push({
+    task: "Check and optimize coolant flow; inspect thermal sensors",
+    priority: "Medium",
+    due: "Within 48 hours",
+    progress: 20,
+  });
+}
 
-    if (speed > 4800) {
-      tasks.push({
-        task: "Spindle load balancing",
-        priority: "Medium",
-        due: "Within 5 days",
-        progress: 10,
-      });
-    }
+if (speed > 4800) {
+  tasks.push({
+    task: "Perform spindle load balancing and torque verification",
+    priority: "Medium",
+    due: "Within 3 days",
+    progress: 10,
+  });
+}
 
-    if (tasks.length === 0) {
-      tasks.push({
-        task: "Routine monitoring",
-        priority: "Low",
-        due: "No urgent action required",
-        progress: 80,
-      });
-    }
+// If no urgent maintenance required
+if (tasks.length === 0) {
+  tasks.push({
+    task: "Routine system monitoring and lubrication check",
+    priority: "Low",
+    due: "Next scheduled maintenance",
+    progress: 80,
+  });
+}
 
-    setPreventiveTasks(tasks);
+setPreventiveTasks(tasks);
 
-    // Future Failure Prediction
-    const predictions: Prediction[] = [];
+// Future Failure Prediction (more professional)
+const predictions: Prediction[] = [];
 
-    if (vib > 7) {
-      predictions.push({
-        name: "Spindle Bearing",
-        days: "30 days",
-        condition: "High vibration wear detected",
-        color: "text-red-600",
-      });
-    }
+if (vib > 7) {
+  predictions.push({
+    name: "Spindle Bearing",
+    days: "Approx. 30 days",
+    condition: "High vibration detected; potential bearing fatigue",
+    color: "text-red-600",
+  });
+}
 
-    if (temp > 90) {
-      predictions.push({
-        name: "Drive Motor",
-        days: "20 days",
-        condition: "Overheating risk",
-        color: "text-red-600",
-      });
-    }
+if (temp > 90) {
+  predictions.push({
+    name: "Drive Motor & Thermal Sensors",
+    days: "Approx. 20 days",
+    condition: "Overheating risk; thermal stress may reduce motor lifespan",
+    color: "text-red-600",
+  });
+}
 
-    if (predictions.length === 0) {
-      predictions.push({
-        name: "All Components",
-        days: "120+ days",
-        condition: "Stable operation",
-        color: "text-green-600",
-      });
-    }
+if (speed > 5000) {
+  predictions.push({
+    name: "Spindle Assembly",
+    days: "Approx. 15 days",
+    condition: "Overspeed operation detected; risk of mechanical wear",
+    color: "text-red-600",
+  });
+}
 
-    setFuturePredictions(predictions);
-  }
+// Default prediction if everything stable
+if (predictions.length === 0) {
+  predictions.push({
+    name: "All Components",
+    days: "120+ days",
+    condition: "Stable operation with normal wear expected",
+    color: "text-green-600",
+  });
+}
+
+setFuturePredictions(predictions);
 
   const healthColor =
     healthScore > 85
@@ -200,6 +260,24 @@ setDiagnoses(issues);
         {/* Main Content */}
         <section className="px-4 sm:px-6 lg:px-8 pb-16">
           <div className="max-w-7xl mx-auto space-y-6">
+
+            <Card className="p-6 border-l-4 border-red-500 bg-red-50">
+              <h3 className="text-lg font-semibold mb-3 text-red-700">
+                Real-Time Alerts
+              </h3>
+
+              {alerts.length === 0 ? (
+                <p className="text-gray-500">No active alerts</p>
+              ) : (
+                <ul className="space-y-2">
+                  {alerts.map((alert, index) => (
+                    <li key={index} className="text-red-600 font-medium">
+                      {alert.message}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Card>
 
             {/* Health Score */}
             <Card className="p-6">
