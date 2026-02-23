@@ -12,7 +12,6 @@ require("./config/influx"); // initialize influx
 const { initMQTT } = require("./services/mqttSubscriber");
 
 // Routes
-//const equipmentRoutes = require("./routes/equipment.routes");
 const sensorRoutes = require("./routes/sensors.routes");
 const predictionRoutes = require("./routes/prediction.routes");
 

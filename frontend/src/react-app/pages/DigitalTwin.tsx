@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {  Box,
-  Activity,
-  AlertTriangle,
-  TrendingUp,
-  ChevronRight,
-  X,
+import { motion } from "framer-motion";
+import {  
+  Box,
+  //X,
   Thermometer,
   Gauge,
   Zap, } from "lucide-react";
-import { Button } from "@/react-app/components/ui/button";
+//import { Button } from "@/react-app/components/ui/button";
 import { Card } from "@/react-app/components/ui/card";
 import Navbar from "@/react-app/components/Navbar";
 import PageTransition from "@/react-app/components/PageTransition";
@@ -21,7 +18,7 @@ import { useEffect } from "react";
 
 //mqtt code (IMP)
 export default function DigitalTwinPage() {
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  //const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const THRESHOLDS = {
     temperature: 80,
@@ -135,14 +132,14 @@ export default function DigitalTwinPage() {
 
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
               {[
-                {
+                /*{
                   icon: Activity,
                   label: "Health Score",
                   value: `${healthScore}%`,
                   critical: healthScore < 70,
-                },
+                },*/
                 {
                   icon: Thermometer,
                   label: "Temperature",
